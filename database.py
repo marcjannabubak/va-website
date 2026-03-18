@@ -1,6 +1,31 @@
 import sqlite3
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, jsonify
+import requests
 
+
+
+#login system
+app = Flask(__name__)
+users={
+    "admin", "password",
+    "test","testing"}
+@app.route('/login',methods=['POST'] )
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    if username in users and check_password_hash(users[username], password):
+        return jsonify({"status":"success","message": "Login successful!"}), 200
+    else:
+        return jsonify({"status":"error", "message": "Invalid credentials!"}), 401
+if __name__=='__main__':
+    app.run(debug=True)
+
+
+
+#db from uml 
 def init_db():
     conn = sqlite3.connect('va.db')
     c = conn.cursor()
@@ -48,23 +73,22 @@ def init_db():
         date TEXT NOT NULL
     )''')
 
-    hashed = generate_password_hash("admin123")
-    c.execute('''INSERT OR IGNORE INTO Admin (IDadmin, username, password, role)
-                 VALUES (1, "admin", ?, "admin")''', (hashed,))
+   
+    #conn.commit()
+   
+  
 
-    conn.commit()
-    
+#methods for db
 class Admin:
     def __init__(self, username, password, role):
         self.username = username
         self.password = password
         self.role = role
 
-    def authenticate(self, entered_password):
-        return checkPassword(self.password, entered_password)
-
+   
     def __str__(self):
         return f"Admin: {self.username}, Role: {self.role}"
+
 
 class ArchiveItem:
     def __init__(self, year, author, name, image):
@@ -74,15 +98,16 @@ class ArchiveItem:
         self.image = image
 
     def upload(self):
-       #to do->> saving db algoritm 
+        # to do - saving to db algorithm
         pass
 
     def sort():
-        # to do->> sorting algorithm
+        # to do - sorting algorithm
         pass
 
     def __str__(self):
         return f"{self.name} by {self.author} ({self.year})"
+
 
 class Board:
     def __init__(self, title, resourceOrDP1OrDP2):
@@ -91,6 +116,7 @@ class Board:
 
     def __str__(self):
         return f"Board: {self.title}"
+
 
 class Post:
     def __init__(self, title, content, date, IDboard):
@@ -102,6 +128,7 @@ class Post:
     def __str__(self):
         return f"Post: {self.title} on {self.date}"
 
+
 class TimelineEvent:
     def __init__(self, title, description, date):
         self.title = title
@@ -110,7 +137,7 @@ class TimelineEvent:
 
     def __str__(self):
         return f"{self.title} - {self.date}"
-    
+
 
 if __name__ == '__main__':
     init_db()
