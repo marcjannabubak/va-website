@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Arts</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="/">Visual Arts</a>
+        {% if session.admin %}
+            <span>{{ session.admin }}</span>
+            <a href="/logout">Log Out</a>
+        {% else %}
+            <button id="openLogin">Log In</button>
+        {% endif %}
+    </nav>
+
+    <div id="loginOverlay" style="display:none;">
+        <div class="container">
+            <h2 class="text-center">Login</h2>
+            <br>
+            <form action="/login" method="POST" class="loginForm">
+                <div class="input-group">
+                    <label for="username" class="label">Username</label>
+                    <input type="text" id="username" name="username" class="input">
+                    <span class="error-message"></span>
+                </div>
+                <div class="input-group">
+                    <label for="password" class="label">Password</label>
+                    <input type="password" id="password" name="password" class="input">
+                    <span class="error-message"></span>
+                </div>
+                {% if error %}
+                    <p class="error-message" style="display:block">{{ error }}</p>
+                {% endif %}
+                <br>
+                <button class="button" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

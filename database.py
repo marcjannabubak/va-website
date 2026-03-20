@@ -101,9 +101,20 @@ class ArchiveItem:
         # to do - saving to db algorithm
         pass
 
-    def sort():
-        # to do - sorting algorithm
-        pass
+def sort(items):
+    n = len(items)
+    i = 0
+    while i < n - 1:
+        j = 0
+        while j < n - i - 1:
+            if items[j].year < items[j + 1].year:
+                t = items[j]
+                items[j] = items[j + 1]
+                items[j + 1] = t
+            j += 1
+        i += 1
+    return items
+        
     def authenticate():
         # to do - authentication algorithm
         pass
