@@ -104,6 +104,9 @@ class ArchiveItem:
     def sort():
         # to do - sorting algorithm
         pass
+    def authenticate():
+        # to do - authentication algorithm
+        pass
 
     def __str__(self):
         return f"{self.name} by {self.author} ({self.year})"
