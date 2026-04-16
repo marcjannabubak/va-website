@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="home-content">
+    <h1>Welcome to the Visual Arts website</h1>
+   
+
+    {% if session.get('admin') %}
+        <div class="admin-controls">
+            <button>Edit Posts</button>
+            <button>Add Post</button>
+            <button>Update Archive</button>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

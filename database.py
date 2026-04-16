@@ -5,23 +5,7 @@ import requests
 
 
 
-#login system
-app = Flask(__name__)
-users={
-    "admin", "password",
-    "test","testing"}
-@app.route('/login',methods=['POST'] )
-def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-
-    if username in users and check_password_hash(users[username], password):
-        return jsonify({"status":"success","message": "Login successful!"}), 200
-    else:
-        return jsonify({"status":"error", "message": "Invalid credentials!"}), 401
-if __name__=='__main__':
-    app.run(debug=True)
+#login system 
 
 
 
@@ -115,11 +99,11 @@ def sort(items):
         i += 1
     return items
         
-    def authenticate():
+def authenticate():
         # to do - authentication algorithm
         pass
 
-    def __str__(self):
+def __str__(self):
         return f"{self.name} by {self.author} ({self.year})"
 
 

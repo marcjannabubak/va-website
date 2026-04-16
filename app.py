@@ -1,17 +1,33 @@
-import tkinter as tk
-from tkinter import messagebox
-import requests
+from flask import Flask, render_template, request, redirect, url_for, session
 
+app = Flask(__name__)
+app.secret_key = "va-secret-key"
 
-FLASK_URL=
+admins = {
+    "DPteacher1": "art2020000",
+    "PreDPteacher": "art1010000"
+}
+
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+@app.route("/login", methods=["POST"])
 def login():
-    username = entry_username.get()
-    password = entry_password.get()
+    username = request.form["username"]
+    password = request.form["password"]
 
-    if not username or not password:
-        messagebox.showerror("Error", "Please enter both username and password.")
-        return
+    if username in admins and admins[username] == password:
+        session["admin"] = username
+    else:
+        return render_template("home.html", error="Invalid username or password")
 
-    try:
-        response = requests.post(FLASK_URL, json={'username': username, 'password': password})
-       
+    return redirect(url_for("home"))
+
+@app.route("/logout")
+def logout():
+    session.pop("admin", None)
+    return redirect(url_for("home"))
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5002)
