@@ -1,14 +1,4 @@
 import sqlite3
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, jsonify
-import requests
-
-
-
-#login system 
-
-
-
 #db from uml 
 def init_db():
     conn = sqlite3.connect('va.db')
@@ -58,9 +48,35 @@ def init_db():
     )''')
 
    
-    #conn.commit()
-   
-  
+    conn.commit()
+
+def check_admin(username, password):
+    conn = sqlite3.connect('va.db')
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    c.execute(
+        "SELECT * FROM Admin WHERE username = ? AND password = ?",
+        (username, password)
+    )
+    admin = c.fetchone()
+
+    
+    return admin
+
+def check_admin(username, password):
+    conn = sqlite3.connect('va.db')
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    c.execute(
+        "SELECT * FROM Admin WHERE username = ? AND password = ?",
+        (username, password)
+    )
+    admin = c.fetchone()
+
+    
+    return admin
 
 #methods for db
 class Admin:
@@ -98,10 +114,7 @@ def sort(items):
             j += 1
         i += 1
     return items
-        
-def authenticate():
-        # to do - authentication algorithm
-        pass
+   
 
 def __str__(self):
         return f"{self.name} by {self.author} ({self.year})"
