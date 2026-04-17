@@ -1,16 +1,39 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<section class="home-content">
-    <h1>Welcome to the Visual Arts website</h1>
-   
 
-    {% if session.get('admin') %}
-        <div class="admin-controls">
-            <button>Edit Posts</button>
-            <button>Add Post</button>
-            <button>Update Archive</button>
+<section class="home-container">
+    <h1 class="title">Visual Arts Archive</h1>
+    <p class="subtitle">Explore and manage visual arts content</p>
+
+    {% if error %}
+        <div class="error-box">
+            {{ error }}
         </div>
     {% endif %}
+
+    {% if session.get('admin') %}
+        <div class="admin-panel">
+            <h2>Admin Controls</h2>
+            <a href="{{ url_for('add_post_page') }}" class="admin-btn">Add Post</a>
+        </div>
+    {% endif %}
+
+    <div class="content-section">
+        <h2>Posts</h2>
+
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post-card">
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.content }}</p>
+                    <small>{{ post.date }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No posts yet.</p>
+        {% endif %}
+    </div>
 </section>
+
 {% endblock %}

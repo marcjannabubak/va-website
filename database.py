@@ -64,19 +64,39 @@ def check_admin(username, password):
     
     return admin
 
-def check_admin(username, password):
+def get_admin_by_username(username):
     conn = sqlite3.connect('va.db')
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
 
-    c.execute(
-        "SELECT * FROM Admin WHERE username = ? AND password = ?",
-        (username, password)
-    )
+    c.execute("SELECT * FROM Admin WHERE username = ?", (username,))
     admin = c.fetchone()
 
-    
+    conn.close()
     return admin
+def get_all_posts():
+    conn = sqlite3.connect('va.db')
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM Post ORDER BY IDpost DESC")
+    posts = c.fetchall()
+
+    conn.close()
+    return posts
+
+
+def get_all_posts():
+    conn = sqlite3.connect('va.db')
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM Post ORDER BY IDpost DESC")
+    posts = c.fetchall()
+
+    conn.close()
+    return posts
+
 
 #methods for db
 class Admin:
