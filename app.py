@@ -61,7 +61,7 @@ def add_post_page():
         add_post(title, content, date, IDboard, IDadmin)
         return redirect(url_for("home"))
 
-    return render_template("add_post.html")
+    return render_template("addPost.html")
 
 
 if __name__ == "__main__":

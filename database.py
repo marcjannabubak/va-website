@@ -74,16 +74,6 @@ def get_admin_by_username(username):
 
     conn.close()
     return admin
-def get_all_posts():
-    conn = sqlite3.connect('va.db')
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-
-    c.execute("SELECT * FROM Post ORDER BY IDpost DESC")
-    posts = c.fetchall()
-
-    conn.close()
-    return posts
 
 
 def get_all_posts():
@@ -96,6 +86,17 @@ def get_all_posts():
 
     conn.close()
     return posts
+def add_post(title, content, date, IDboard, IDadmin):
+    conn = sqlite3.connect('va.db')
+    c = conn.cursor()
+
+    c.execute(
+        "INSERT INTO Post (title, content, date, IDboard, IDadmin) VALUES (?, ?, ?, ?, ?)",
+        (title, content, date, IDboard, IDadmin)
+    )
+
+    conn.commit()
+    conn.close()
 
 
 #methods for db
