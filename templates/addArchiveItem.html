@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="home-container">
+    <h1 class="title">Add Archive Item</h1>
+    <p class="subtitle">Upload a PDF and enter file details</p>
+
+    <form method="POST" enctype="multipart/form-data" class="post-form">
+        <input type="number" name="year" placeholder="Year" required>
+
+        <input type="text" name="author" placeholder="Author name" required>
+
+        <input type="text" name="name" placeholder="Archive item name" required>
+
+        <input type="file" name="pdf_file" accept=".pdf" required>
+
+        <button type="submit" class="admin-btn">Upload Archive Item</button>
+    </form>
+</section>
+{% endblock %}

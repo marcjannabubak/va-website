@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from database import init_db, check_admin,  get_admin_by_username, add_post, get_all_posts
+from database import ArchiveItem, init_db, check_admin,  get_admin_by_username, add_post, get_all_posts
 from functools import wraps
 
 
@@ -15,7 +15,8 @@ def admin_required(f):
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    posts =get_all_posts()
+    return render_template("home.html", posts=posts)
 
 
 @app.route("/login", methods=["POST"])
@@ -29,8 +30,10 @@ def login():
         session["admin"] = admin["username"]
         session["role"] = admin["role"]
         return redirect(url_for("home"))
+    
     else:
-        return render_template("home.html", error="Invalid username or password")
+        posts = get_all_posts()
+        return render_template("home.html", error="Invalid username or password", posts=posts)
 
 
 @app.route("/logout")
@@ -62,6 +65,28 @@ def add_post_page():
         return redirect(url_for("home"))
 
     return render_template("addPost.html")
+
+
+@app.route("/add_archive_item", methods=["GET", "POST"])
+@admin_required
+def add_archive_item():
+    if request.method == "POST":
+        year = int(request.form["year"])
+        author = request.form["author"]
+        name = request.form["name"]
+        pdf_file = request.files["pdf_file"]
+        pdfName = pdf_file.filename
+        pdfData = pdf_file.read()
+
+        admin = get_admin_by_username(session["admin"])
+        IDadmin = admin["IDadmin"]
+
+        item = ArchiveItem(year, author, name, pdfName, pdfData, IDadmin)
+        item.upload()
+
+        return redirect(url_for("home"))
+
+    return render_template("addArchiveItem.html")
 
 
 if __name__ == "__main__":

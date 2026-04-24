@@ -1,5 +1,7 @@
 import sqlite3
-#db from uml 
+
+
+#this creates the db tables from the uml diagram
 def init_db():
     conn = sqlite3.connect('va.db')
     c = conn.cursor()
@@ -16,7 +18,8 @@ def init_db():
         year INTEGER NOT NULL,
         author TEXT NOT NULL,
         name TEXT NOT NULL,
-        image TEXT NOT NULL,
+        pdfName TEXT NOT NULL,
+        pdfData BLOB NOT NULL,
         IDadmin INTEGER,
         FOREIGN KEY (IDadmin) REFERENCES Admin(IDadmin)
     )''')
@@ -50,6 +53,7 @@ def init_db():
    
     conn.commit()
 
+#cheecks if the admin exists in the db
 def check_admin(username, password):
     conn = sqlite3.connect('va.db')
     conn.row_factory = sqlite3.Row
@@ -63,6 +67,8 @@ def check_admin(username, password):
 
     
     return admin
+
+#finds and returns the admin with the username from db
 
 def get_admin_by_username(username):
     conn = sqlite3.connect('va.db')
@@ -112,32 +118,48 @@ class Admin:
 
 
 class ArchiveItem:
-    def __init__(self, year, author, name, image):
+    def __init__(self, year, author, name, pdfName, pdfData, IDadmin):
         self.year = year
         self.author = author
         self.name = name
-        self.image = image
+        self.pdfName = pdfName
+        self.pdfData = pdfData
+        self.IDadmin = IDadmin
 
     def upload(self):
-        # to do - saving to db algorithm
-        pass
+        conn = sqlite3.connect("va.db")
+        c = conn.cursor()
 
-def sort(items):
-    n = len(items)
-    i = 0
-    while i < n - 1:
-        j = 0
-        while j < n - i - 1:
-            if items[j].year < items[j + 1].year:
-                t = items[j]
-                items[j] = items[j + 1]
-                items[j + 1] = t
-            j += 1
-        i += 1
-    return items
+        c.execute("""
+            INSERT INTO ArchiveItem (year, author, name, pdfName, pdfData, IDadmin)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (
+            self.year,
+            self.author,
+            self.name,
+            self.pdfName,
+            self.pdfData,
+            self.IDadmin
+        ))
+
+        conn.commit()
+
+    def sort(items):
+        n = len(items)
+        i = 0
+        while i < n - 1:
+            j = 0
+            while j < n - i - 1:
+                if items[j].year < items[j + 1].year:
+                    t = items[j]
+                    items[j] = items[j + 1]
+                    items[j + 1] = t
+                j += 1
+            i += 1
+        return items
    
 
-def __str__(self):
+    def __str__(self):
         return f"{self.name} by {self.author} ({self.year})"
 
 
