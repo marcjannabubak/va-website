@@ -92,6 +92,7 @@ def get_all_posts():
 
     conn.close()
     return posts
+
 def add_post(title, content, date, IDboard, IDadmin):
     conn = sqlite3.connect('va.db')
     c = conn.cursor()
@@ -99,6 +100,18 @@ def add_post(title, content, date, IDboard, IDadmin):
     c.execute(
         "INSERT INTO Post (title, content, date, IDboard, IDadmin) VALUES (?, ?, ?, ?, ?)",
         (title, content, date, IDboard, IDadmin)
+    )
+
+    conn.commit()
+    conn.close()
+
+def add_timeline_event(title, description, date):
+    conn = sqlite3.connect("va.db")
+    c = conn.cursor()
+
+    c.execute(
+        "INSERT INTO TimelineEvent (title, description, date) VALUES (?, ?, ?)",
+        (title, description, date)
     )
 
     conn.commit()
@@ -144,7 +157,7 @@ class ArchiveItem:
 
         conn.commit()
 
-    def sort(items):
+    def sort(self, items):
         n = len(items)
         i = 0
         while i < n - 1:

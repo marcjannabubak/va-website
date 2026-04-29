@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-
 {% block content %}
 
 <section class="home-container">
@@ -16,6 +15,7 @@
         <div class="admin-panel">
             <h2>Admin Controls</h2>
             <a href="{{ url_for('add_post_page') }}" class="admin-btn">Add Post</a>
+            <a href="{{ url_for('add_archive_item_page') }}" class="admin-btn">Upload Archive Item</a>
         </div>
     {% endif %}
 

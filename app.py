@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from database import ArchiveItem, init_db, check_admin,  get_admin_by_username, add_post, get_all_posts
+from database import ArchiveItem, add_timeline_event, init_db, check_admin,  get_admin_by_username, add_post, get_all_posts
 from functools import wraps
 
 
@@ -88,6 +88,18 @@ def add_archive_item():
 
     return render_template("addArchiveItem.html")
 
+@app.route("/add_timeline_event", methods=["GET", "POST"])
+@admin_required
+def add_timeline_event_page():
+    if request.method == "POST":
+        title = request.form["title"]
+        description = request.form["description"]
+        date = request.form["date"]
+
+        add_timeline_event(title, description, date)
+        return redirect(url_for("home"))
+
+    return render_template("addTimelineEvent.html")
 
 if __name__ == "__main__":
     init_db()
