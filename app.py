@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from database import ArchiveItem, add_timeline_event, get_all_timeline_events, init_db, check_admin,  get_admin_by_username, add_post, get_all_posts
+from database import ArchiveItem, add_timeline_event, get_all_timeline_events, init_db, check_admin,  get_admin_by_username, add_post, get_all_posts, get_board_by_id, get_all_archive_items, get_archive_item_by_id
 from functools import wraps
 
 
@@ -105,6 +105,21 @@ def add_timeline_event_page():
 def timeline():
     events = get_all_timeline_events()
     return render_template("timeline.html", events=events)
+
+@app.route("/board/<int:IDboard>")
+def board_page(IDboard):
+    board = get_board_by_id(IDboard)
+    return render_template("board.html", board=board)
+ 
+@app.route("/archive")
+def archive():
+    items = get_all_archive_items()
+    return render_template("archive.html", items=items)
+
+@app.route("/archive/<int:IDarchiveItem>")
+def archive_item_page(IDarchiveItem):
+    item = get_archive_item_by_id(IDarchiveItem)
+    return render_template("archiveItem.html", item=item)
 
 if __name__ == "__main__":
     init_db()

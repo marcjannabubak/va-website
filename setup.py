@@ -29,14 +29,21 @@ def view_admins(conn):
     for admin in admins:
         print(admin)
     print()
-    
-def add_board(conn, title, resourceOrDP1OrDP2, IDadmin):
+
+def add_board(conn):
+    title = input("enter board title: ")
+    resourceOrDP1OrDP2 = input("Enter board type: ")
+    IDadmin = input("Enter admin ID: ")
+
     c = conn.cursor()
     c.execute(
         "INSERT INTO Board (title, resourceOrDP1OrDP2, IDadmin) VALUES (?, ?, ?)",
         (title, resourceOrDP1OrDP2, IDadmin)
     )
     conn.commit()
+
+    print("board added\n")
+
 
 
 def run():

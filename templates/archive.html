@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="home-container">
+    <h1 class="title">Archive</h1>
+    <p class="subtitle">View all archive items</p>
+
+    <div class="content-section">
+        {% if items %}
+            {% for item in items %}
+                <div class="post-card">
+                    <h3>{{ item.name }}</h3>
+                    <p>Author: {{ item.author }}</p>
+                    <small>Year: {{ item.year }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No archive items yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

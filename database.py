@@ -125,6 +125,37 @@ def get_all_timeline_events():
     conn.close()
     return events
 
+def get_all_archive_items():
+    conn = sqlite3.connect("va.db")
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    c.execute("SELECT * FROM ArchiveItem ORDER BY year DESC")
+    items = c.fetchall()
+
+    conn.close()
+    return items
+def get_archive_item_by_id(IDarchiveItem):
+    conn = sqlite3.connect("va.db")
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    c.execute("SELECT * FROM ArchiveItem WHERE IDarchiveItem = ?", (IDarchiveItem,))
+    item = c.fetchone()
+
+    conn.close()
+    return item
+
+def get_board_by_id(IDboard):
+        conn = sqlite3.connect("va.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+
+        c.execute("SELECT * FROM Board WHERE IDboard = ?", (IDboard,))
+        board = c.fetchone()
+
+        conn.close()
+        return board
+
 #methods for db
 class Admin:
     def __init__(self, username, password, role):
@@ -163,6 +194,7 @@ class ArchiveItem:
         ))
 
         conn.commit()
+    
 
     def sort(self, items):
         n = len(items)
