@@ -113,10 +113,17 @@ def add_timeline_event(title, description, date):
         "INSERT INTO TimelineEvent (title, description, date) VALUES (?, ?, ?)",
         (title, description, date)
     )
-
     conn.commit()
     conn.close()
 
+def get_all_timeline_events():
+    conn = sqlite3.connect("va.db")
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    c.execute("SELECT * FROM TimelineEvent ORDER BY date DESC")
+    events = c.fetchall()
+    conn.close()
+    return events
 
 #methods for db
 class Admin:

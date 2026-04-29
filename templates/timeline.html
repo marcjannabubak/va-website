@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="home-container">
+    <h1 class="title">Timeline</h1>
+    <p class="subtitle">View all timeline events</p>
+
+    <div class="content-section">
+        {% if events %}
+            {% for event in events %}
+                <div class="post-card">
+                    <h3>{{ event.title }}</h3>
+                    <p>{{ event.description }}</p>
+                    <small>{{ event.date }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No timeline events yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -29,6 +29,14 @@ def view_admins(conn):
     for admin in admins:
         print(admin)
     print()
+    
+def add_board(conn, title, resourceOrDP1OrDP2, IDadmin):
+    c = conn.cursor()
+    c.execute(
+        "INSERT INTO Board (title, resourceOrDP1OrDP2, IDadmin) VALUES (?, ?, ?)",
+        (title, resourceOrDP1OrDP2, IDadmin)
+    )
+    conn.commit()
 
 
 def run():
@@ -38,7 +46,8 @@ def run():
         print("==== ADMIN MENU ====")
         print("1: Add admin")
         print("2: View admins")
-        print("3: Exit")
+        print("3: add board")
+        print("4: Exit")
         choice = input("Choose: ")
 
         if choice == "1":
@@ -46,8 +55,11 @@ def run():
 
         elif choice == "2":
             view_admins(conn)
-
+        
         elif choice == "3":
+            add_board(conn)
+
+        elif choice == "4":
             print("Exiting db")
             conn.close()
             break
