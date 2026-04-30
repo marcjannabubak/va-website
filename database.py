@@ -1,3 +1,4 @@
+from datetime import date
 import sqlite3
 
 
@@ -49,112 +50,25 @@ def init_db():
         description TEXT NOT NULL,
         date TEXT NOT NULL
     )''')
-
+    c.execute('''CREATE TABLE IF NOT EXISTS ArtTerms(
+             IDartTerm INTEGER PRIMARY KEY AUTOINCREMENT,
+             title TEXT NOT NULL,
+             definition TEXT NOT NULL
+             image BLOB NOT NULL
+             FOREIGN KEY (IDadmin) REFERENCES Admin(IDadmin)
+         )''' )
    
     conn.commit()
 
-#cheecks if the admin exists in the db
-def check_admin(username, password):
-    conn = sqlite3.connect('va.db')
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-
-    c.execute(
-        "SELECT * FROM Admin WHERE username = ? AND password = ?",
-        (username, password)
-    )
-    admin = c.fetchone()
-
-    
-    return admin
-
-#finds and returns the admin with the username from db
-
-def get_admin_by_username(username):
-    conn = sqlite3.connect('va.db')
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-
-    c.execute("SELECT * FROM Admin WHERE username = ?", (username,))
-    admin = c.fetchone()
-
-    conn.close()
-    return admin
 
 
-def get_all_posts():
-    conn = sqlite3.connect('va.db')
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
 
-    c.execute("SELECT * FROM Post ORDER BY IDpost DESC")
-    posts = c.fetchall()
+   
 
-    conn.close()
-    return posts
 
-def add_post(title, content, date, IDboard, IDadmin):
-    conn = sqlite3.connect('va.db')
-    c = conn.cursor()
 
-    c.execute(
-        "INSERT INTO Post (title, content, date, IDboard, IDadmin) VALUES (?, ?, ?, ?, ?)",
-        (title, content, date, IDboard, IDadmin)
-    )
 
-    conn.commit()
-    conn.close()
 
-def add_timeline_event(title, description, date):
-    conn = sqlite3.connect("va.db")
-    c = conn.cursor()
-
-    c.execute(
-        "INSERT INTO TimelineEvent (title, description, date) VALUES (?, ?, ?)",
-        (title, description, date)
-    )
-    conn.commit()
-    conn.close()
-
-def get_all_timeline_events():
-    conn = sqlite3.connect("va.db")
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-    c.execute("SELECT * FROM TimelineEvent ORDER BY date DESC")
-    events = c.fetchall()
-    conn.close()
-    return events
-
-def get_all_archive_items():
-    conn = sqlite3.connect("va.db")
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-
-    c.execute("SELECT * FROM ArchiveItem ORDER BY year DESC")
-    items = c.fetchall()
-
-    conn.close()
-    return items
-def get_archive_item_by_id(IDarchiveItem):
-    conn = sqlite3.connect("va.db")
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-    c.execute("SELECT * FROM ArchiveItem WHERE IDarchiveItem = ?", (IDarchiveItem,))
-    item = c.fetchone()
-
-    conn.close()
-    return item
-
-def get_board_by_id(IDboard):
-        conn = sqlite3.connect("va.db")
-        conn.row_factory = sqlite3.Row
-        c = conn.cursor()
-
-        c.execute("SELECT * FROM Board WHERE IDboard = ?", (IDboard,))
-        board = c.fetchone()
-
-        conn.close()
-        return board
 
 #methods for db
 class Admin:
@@ -162,7 +76,33 @@ class Admin:
         self.username = username
         self.password = password
         self.role = role
+#cheecks if the admin exists in the db
+    def check_admin(username, password):
+        conn = sqlite3.connect('va.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
 
+        c.execute(
+            "SELECT * FROM Admin WHERE username = ? AND password = ?",
+            (username, password)
+        )
+        admin = c.fetchone()
+
+        
+        return admin
+
+#finds and returns the admin with the username from db
+
+    def get_admin_by_username(username):
+        conn = sqlite3.connect('va.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+
+        c.execute("SELECT * FROM Admin WHERE username = ?", (username,))
+        admin = c.fetchone()
+
+
+        return admin
    
     def __str__(self):
         return f"Admin: {self.username}, Role: {self.role}"
@@ -210,6 +150,22 @@ class ArchiveItem:
             i += 1
         return items
    
+    def get_all_archive_items():
+        conn = sqlite3.connect("va.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("SELECT * FROM ArchiveItem ORDER BY year DESC")
+        items = c.fetchall()
+
+    
+        return items
+    def get_archive_item_by_id(IDarchiveItem):
+        conn = sqlite3.connect("va.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("SELECT * FROM ArchiveItem WHERE IDarchiveItem = ?", (IDarchiveItem,))
+        item = c.fetchone()
+        return item
 
     def __str__(self):
         return f"{self.name} by {self.author} ({self.year})"
@@ -223,7 +179,15 @@ class Board:
     def __str__(self):
         return f"Board: {self.title}"
 
+    def get_board_by_id(IDboard):
+        conn = sqlite3.connect("va.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
 
+        c.execute("SELECT * FROM Board WHERE IDboard = ?", (IDboard,))
+        board = c.fetchone()
+        return board
+    
 class Post:
     def __init__(self, title, content, date, IDboard):
         self.title = title
@@ -233,17 +197,73 @@ class Post:
 
     def __str__(self):
         return f"Post: {self.title} on {self.date}"
+    def get_all_posts():
+        conn = sqlite3.connect('va.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
 
+        c.execute("SELECT * FROM Post ORDER BY IDpost DESC")
+        posts = c.fetchall()
+
+    
+        return posts
+
+    def add_post(title, content, date, IDboard, IDadmin):
+        conn = sqlite3.connect('va.db')
+        c = conn.cursor()
+
+        c.execute(
+            "INSERT INTO Post (title, content, date, IDboard, IDadmin) VALUES (?, ?, ?, ?, ?)",
+            (title, content, date, IDboard, IDadmin)
+        )
+
+        conn.commit()
 
 class TimelineEvent:
     def __init__(self, title, description, date):
         self.title = title
         self.description = description
         self.date = date
+    def add_timeline_event(title, description, date):
+        conn = sqlite3.connect("va.db")
+        c = conn.cursor()
 
+        c.execute(
+            "INSERT INTO TimelineEvent (title, description, date) VALUES (?, ?, ?)",
+            (title, description, date)
+        )
+        conn.commit()
+    
+
+    def get_all_timeline_events():
+        conn = sqlite3.connect("va.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("SELECT * FROM TimelineEvent ORDER BY date DESC")
+        events = c.fetchall()
+    
+        return events
     def __str__(self):
         return f"{self.title} - {self.date}"
 
+    class ArtTerms:
+        def __init__(self, title, definition, image):
+            self.title = title
+            self.definition = definition
+            self.image = image
+
+        def add_art_term(title, defiiniton, image, IDadmin):
+            conn = sqlite3.connect("va.db")
+            c = conn.cursor()
+
+            c.execute(
+                "INSERT INTO ArtTerms (title, definition, image, IDadmin) VALUES (?, ?, ?, ?)",
+                (title, defiiniton, image, IDadmin)
+            )
+            conn.commit()
+
+        def __str__(self):
+            return f"Art Term: {self.title}"
 
 if __name__ == '__main__':
     init_db()

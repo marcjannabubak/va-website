@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from database import ArchiveItem, add_timeline_event, get_all_timeline_events, init_db, check_admin,  get_admin_by_username, add_post, get_all_posts, get_board_by_id, get_all_archive_items, get_archive_item_by_id
+from database import Admin, ArchiveItem, Board, Post, TimelineEvent, init_db, ArtTerms
+
 from functools import wraps
 
 
@@ -15,7 +16,7 @@ def admin_required(f):
 
 @app.route("/")
 def home():
-    posts =get_all_posts()
+    posts = Post.get_all_posts()
     return render_template("home.html", posts=posts)
 
 
@@ -24,7 +25,7 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
 
-    admin = check_admin(username, password)
+    admin = Admin.check_admin(username, password)
 
     if admin:
         session["admin"] = admin["username"]
@@ -32,7 +33,7 @@ def login():
         return redirect(url_for("home"))
     
     else:
-        posts = get_all_posts()
+        posts = Post.get_all_posts()
         return render_template("home.html", error="Invalid username or password", posts=posts)
 
 
@@ -56,12 +57,12 @@ def add_post_page():
         content = request.form["content"]
         date = request.form["date"]
 
-        admin = get_admin_by_username(session["admin"])
+        admin = Admin.get_admin_by_username(session["admin"])
 
         IDboard = 1
         IDadmin = admin["IDadmin"]
 
-        add_post(title, content, date, IDboard, IDadmin)
+        Post.add_post(title, content, date, IDboard, IDadmin)
         return redirect(url_for("home"))
 
     return render_template("addPost.html")
@@ -78,7 +79,7 @@ def add_archive_item():
         pdfName = pdf_file.filename
         pdfData = pdf_file.read()
 
-        admin = get_admin_by_username(session["admin"])
+        admin = Admin.get_admin_by_username(session["admin"])
         IDadmin = admin["IDadmin"]
 
         item = ArchiveItem(year, author, name, pdfName, pdfData, IDadmin)
@@ -96,30 +97,46 @@ def add_timeline_event_page():
         description = request.form["description"]
         date = request.form["date"]
 
-        add_timeline_event(title, description, date)
+        TimelineEvent.add_timeline_event(title, description, date)
         return redirect(url_for("home"))
 
     return render_template("addTimelineEvent.html")
 
 @app.route("/timeline")
 def timeline():
-    events = get_all_timeline_events()
+    events = TimelineEvent.get_all_timeline_events()
     return render_template("timeline.html", events=events)
 
 @app.route("/board/<int:IDboard>")
 def board_page(IDboard):
-    board = get_board_by_id(IDboard)
+    board = Board.get_board_by_id(IDboard)
     return render_template("board.html", board=board)
  
 @app.route("/archive")
 def archive():
-    items = get_all_archive_items()
+    items = ArchiveItem.get_all_archive_items()
     return render_template("archive.html", items=items)
 
 @app.route("/archive/<int:IDarchiveItem>")
 def archive_item_page(IDarchiveItem):
-    item = get_archive_item_by_id(IDarchiveItem)
+    item = ArchiveItem.get_archive_item_by_id(IDarchiveItem)
     return render_template("archiveItem.html", item=item)
+
+
+@app.route("/art_terms", methods=["GET", "POST"])
+def art_terms():
+    @admin_required
+    if request.method == "POST":
+        title = request.form["title"]
+        definition = request.form["term"]
+        image_file = request.files["image_file"]
+        imageData = image_file.read()
+
+        admin = Admin.get_admin_by_username(session["admin"])
+        IDadmin = admin["IDadmin"]
+
+        ArtTerms.add_art_term(title, definition, imageData, IDadmin)
+        return redirect(url_for("art_terms"))
 
 if __name__ == "__main__":
     init_db()
