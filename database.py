@@ -55,6 +55,7 @@ def init_db():
              title TEXT NOT NULL,
              definition TEXT NOT NULL
              image BLOB NOT NULL
+             IDadmin INTEGER,
              FOREIGN KEY (IDadmin) REFERENCES Admin(IDadmin)
          )''' )
    

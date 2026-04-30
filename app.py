@@ -124,8 +124,8 @@ def archive_item_page(IDarchiveItem):
 
 
 @app.route("/art_terms", methods=["GET", "POST"])
+@admin_required
 def art_terms():
-    @admin_required
     if request.method == "POST":
         title = request.form["title"]
         definition = request.form["term"]
