@@ -232,6 +232,15 @@ class Post:
     
         return posts
 
+    def get_post_by_id(IDpost):
+        conn = sqlite3.connect('va.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+
+        c.execute("SELECT * FROM Post WHERE IDpost = ?", (IDpost,))
+        post = c.fetchone()
+        return post
+    
     def add_post(title, content, date, IDboard, IDadmin):
         conn = sqlite3.connect('va.db')
         c = conn.cursor()
@@ -287,6 +296,14 @@ class TimelineEvent:
     
         return events
     
+    def get_timeline_event_by_id(IDtimelineEvent):
+        conn = sqlite3.connect("va.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("SELECT * FROM TimelineEvent WHERE IDtimelineEvent = ?", (IDtimelineEvent,))
+        event = c.fetchone()
+        return event
+    
     def edit_timeline_event(IDtimelineEvent, title, description, date):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -330,10 +347,34 @@ class ArtTerms:
         c = conn.cursor()
         c.execute("SELECT * FROM ArtTerms ORDER BY title DESC")
         terms = c.fetchall()
-    
         return terms
+    def get_art_term_by_id(IDartTerm):
+        conn = sqlite3.connect("va.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("SELECT * FROM ArtTerms WHERE IDartTerm = ?", (IDartTerm,))
+        term = c.fetchone()
+        return term
     
-        
+    def edit_art_term(IDartTerm, title, definition, image):
+        conn = sqlite3.connect("va.db")
+        c = conn.cursor()
+
+        c.execute(
+            "UPDATE ArtTerms SET title = ?, definition = ?, image = ? WHERE IDartTerm = ?",
+            (title, definition, image, IDartTerm)
+        )
+
+        conn.commit()
+    
+
+    def delete_art_term(IDartTerm):
+        conn = sqlite3.connect("va.db")
+        c = conn.cursor()
+
+        c.execute("DELETE FROM ArtTerms WHERE IDartTerm = ?", (IDartTerm,))
+
+        conn.commit()
 
     def __str__(self):
         return f"Art Term: {self.title}"

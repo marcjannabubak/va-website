@@ -207,6 +207,27 @@ def art_terms_list():
     terms = ArtTerms.get_all_art_terms()
     return render_template("artTerms.html", terms=terms)
 
+@app.route("/edit_art_term/<int:IDartTerm>", methods=["GET", "POST"])
+@admin_required
+def edit_art_term(IDartTerm):
+    if request.method == "POST":
+        title = request.form["title"]
+        definition = request.form["definition"]
+        image_file = request.files["image_file"]
+        imageData = image_file.read()
+
+        ArtTerms.edit_art_term(IDartTerm, title, definition, imageData)
+        return redirect(url_for("home"))
+
+    term = ArtTerms.get_art_term_by_id(IDartTerm)
+    return render_template("editArtTerm.html", term=term)
+
+@app.route("/delete_art_term/<int:IDartTerm>", methods=["POST"])
+@admin_required
+def delete_art_term(IDartTerm):
+    ArtTerms.delete_art_term(IDartTerm)
+    return redirect(url_for("home"))
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True, port=5002)
