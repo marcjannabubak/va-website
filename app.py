@@ -67,6 +67,26 @@ def add_post_page():
 
     return render_template("addPost.html")
 
+@app.route("/edit_post/<int:IDpost>", methods=["GET", "POST"])
+@admin_required
+def edit_post(IDpost):
+    if request.method == "POST":
+        title = request.form["title"]
+        content = request.form["content"]
+        date = request.form["date"]
+
+        Post.edit_post(IDpost, title, content, date)
+        return redirect(url_for("home"))
+
+    post = Post.get_post_by_id(IDpost)
+    return render_template("editPost.html", post=post)
+
+
+@app.route("/delete_post/<int:IDpost>", methods=["POST"])
+@admin_required
+def delete_post(IDpost):
+    Post.delete_post(IDpost)
+    return redirect(url_for("home"))
 
 @app.route("/add_archive_item", methods=["GET", "POST"])
 @admin_required
@@ -89,6 +109,29 @@ def add_archive_item():
 
     return render_template("addArchiveItem.html")
 
+@app.route("/edit_archive_item/<int:IDarchiveItem>", methods=["GET", "POST"])
+@admin_required
+def edit_archive_item(IDarchiveItem):
+    if request.method == "POST":
+        year = int(request.form["year"])
+        author = request.form["author"]
+        name = request.form["name"]
+        pdf_file = request.files["pdf_file"]
+        pdfName = pdf_file.filename
+        pdfData = pdf_file.read()
+
+        ArchiveItem.edit_archive_item(IDarchiveItem, year, author, name, pdfName, pdfData)
+        return redirect(url_for("home"))
+
+    item = ArchiveItem.get_archive_item_by_id(IDarchiveItem)
+    return render_template("editArchiveItem.html", item=item)
+
+@app.route("/delete_archive_item/<int:IDarchiveItem>", methods=["POST"])
+@admin_required
+def delete_archive_item(IDarchiveItem):
+    ArchiveItem.delete_archive_item(IDarchiveItem)
+    return redirect(url_for("home"))
+
 @app.route("/add_timeline_event", methods=["GET", "POST"])
 @admin_required
 def add_timeline_event_page():
@@ -101,6 +144,26 @@ def add_timeline_event_page():
         return redirect(url_for("home"))
 
     return render_template("addTimelineEvent.html")
+
+@app.route("/edit_timeline_event/<int:IDtimelineEvent>", methods=["GET", "POST"])
+@admin_required
+def edit_timeline_event(IDtimelineEvent):
+    if request.method == "POST":
+        title = request.form["title"]
+        description = request.form["description"]
+        date = request.form["date"]
+
+        TimelineEvent.edit_timeline_event(IDtimelineEvent, title, description, date)
+        return redirect(url_for("home"))
+
+    event = TimelineEvent.get_timeline_event_by_id(IDtimelineEvent)
+    return render_template("editTimelineEvent.html", event=event)
+
+@app.route("/delete_timeline_event/<int:IDtimelineEvent>", methods=["POST"])
+@admin_required
+def delete_timeline_event(IDtimelineEvent):
+    TimelineEvent.delete_timeline_event(IDtimelineEvent)
+    return redirect(url_for("home"))
 
 @app.route("/timeline")
 def timeline():
@@ -128,7 +191,7 @@ def archive_item_page(IDarchiveItem):
 def art_terms():
     if request.method == "POST":
         title = request.form["title"]
-        definition = request.form["term"]
+        definition = request.form["definition"]
         image_file = request.files["image_file"]
         imageData = image_file.read()
 
@@ -136,7 +199,13 @@ def art_terms():
         IDadmin = admin["IDadmin"]
 
         ArtTerms.add_art_term(title, definition, imageData, IDadmin)
-        return redirect(url_for("art_terms"))
+        return redirect(url_for("home"))
+    return render_template("artTerms.html")
+
+@app.route("/art_terms_list")
+def art_terms_list():
+    terms = ArtTerms.get_all_art_terms()
+    return render_template("artTerms.html", terms=terms)
 
 if __name__ == "__main__":
     init_db()

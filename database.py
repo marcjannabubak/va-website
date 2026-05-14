@@ -53,18 +53,14 @@ def init_db():
     c.execute('''CREATE TABLE IF NOT EXISTS ArtTerms(
              IDartTerm INTEGER PRIMARY KEY AUTOINCREMENT,
              title TEXT NOT NULL,
-             definition TEXT NOT NULL
-             image BLOB NOT NULL
+             definition TEXT NOT NULL,
+             image BLOB NOT NULL,
              IDadmin INTEGER,
              FOREIGN KEY (IDadmin) REFERENCES Admin(IDadmin)
          )''' )
    
     conn.commit()
 
-
-
-
-   
 
 
 
@@ -158,8 +154,9 @@ class ArchiveItem:
         c.execute("SELECT * FROM ArchiveItem ORDER BY year DESC")
         items = c.fetchall()
 
-    
         return items
+    
+
     def get_archive_item_by_id(IDarchiveItem):
         conn = sqlite3.connect("va.db")
         conn.row_factory = sqlite3.Row
@@ -167,7 +164,33 @@ class ArchiveItem:
         c.execute("SELECT * FROM ArchiveItem WHERE IDarchiveItem = ?", (IDarchiveItem,))
         item = c.fetchone()
         return item
+    
+    def edit_archive_item(IDarchiveItem, year, author, name, pdfName, pdfData):
+        conn = sqlite3.connect("va.db")
+        c = conn.cursor()
 
+        c.execute("""
+            UPDATE ArchiveItem
+            SET year = ?, author = ?, name = ?, pdfName = ?, pdfData = ?
+            WHERE IDarchiveItem = ?
+        """, (
+            year,
+            author,
+            name,
+            pdfName,
+            pdfData,
+            IDarchiveItem
+        ))
+
+        conn.commit()
+
+    def delete_archive_item(IDarchiveItem):
+        conn = sqlite3.connect("va.db")
+        c = conn.cursor()
+
+        c.execute("DELETE FROM ArchiveItem WHERE IDarchiveItem = ?", (IDarchiveItem,))
+
+        conn.commit()
     def __str__(self):
         return f"{self.name} by {self.author} ({self.year})"
 
@@ -219,6 +242,25 @@ class Post:
         )
 
         conn.commit()
+    
+    def edit_post(IDpost, title, content, date):
+        conn = sqlite3.connect('va.db')
+        c = conn.cursor()
+
+        c.execute(
+            "UPDATE Post SET title = ?, content = ?, date = ? WHERE IDpost = ?",
+            (title, content, date, IDpost)
+        )
+
+        conn.commit()
+
+    def delete_post(IDpost):
+        conn = sqlite3.connect('va.db')
+        c = conn.cursor()
+
+        c.execute("DELETE FROM Post WHERE IDpost = ?", (IDpost,))
+
+        conn.commit()
 
 class TimelineEvent:
     def __init__(self, title, description, date):
@@ -244,27 +286,57 @@ class TimelineEvent:
         events = c.fetchall()
     
         return events
+    
+    def edit_timeline_event(IDtimelineEvent, title, description, date):
+        conn = sqlite3.connect("va.db")
+        c = conn.cursor()
+
+        c.execute(
+            "UPDATE TimelineEvent SET title = ?, description = ?, date = ? WHERE IDtimelineEvent = ?",
+            (title, description, date, IDtimelineEvent)
+        )
+
+        conn.commit()
+
+    def delete_timeline_event(IDtimelineEvent):
+        conn = sqlite3.connect("va.db")
+        c = conn.cursor()
+
+        c.execute("DELETE FROM TimelineEvent WHERE IDtimelineEvent = ?", (IDtimelineEvent,))
+
+        conn.commit()
     def __str__(self):
         return f"{self.title} - {self.date}"
 
-    class ArtTerms:
-        def __init__(self, title, definition, image):
-            self.title = title
-            self.definition = definition
-            self.image = image
+class ArtTerms:
+    def __init__(self, title, definition, image):
+        self.title = title
+        self.definition = definition
+        self.image = image
 
-        def add_art_term(title, defiiniton, image, IDadmin):
-            conn = sqlite3.connect("va.db")
-            c = conn.cursor()
+    def add_art_term(title, definition, image, IDadmin):
+        conn = sqlite3.connect("va.db")
+        c = conn.cursor()
 
-            c.execute(
-                "INSERT INTO ArtTerms (title, definition, image, IDadmin) VALUES (?, ?, ?, ?)",
-                (title, defiiniton, image, IDadmin)
-            )
-            conn.commit()
+        c.execute(
+            "INSERT INTO ArtTerms (title, definition, image, IDadmin) VALUES (?, ?, ?, ?)",
+            (title, definition, image, IDadmin)
+        )
+        conn.commit()
+    
+    def get_all_art_terms():
+        conn = sqlite3.connect("va.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        c.execute("SELECT * FROM ArtTerms ORDER BY title DESC")
+        terms = c.fetchall()
+    
+        return terms
+    
+        
 
-        def __str__(self):
-            return f"Art Term: {self.title}"
+    def __str__(self):
+        return f"Art Term: {self.title}"
 
 if __name__ == '__main__':
     init_db()
