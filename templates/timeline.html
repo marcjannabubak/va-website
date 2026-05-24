@@ -12,6 +12,13 @@
                     <h3>{{ event.title }}</h3>
                     <p>{{ event.description }}</p>
                     <small>{{ event.date }}</small>
+                    {% if session.get('admin') %}
+    <a href="{{ url_for('edit_timeline_event', IDtimelineEvent=event.IDtimelineEvent) }}" class="admin-btn">Edit</a>
+    <form method="POST" action="{{ url_for('delete_timeline_event', IDtimelineEvent=event.IDtimelineEvent) }}" style="display:inline">
+        <button type="submit" class="admin-btn">Delete</button>
+    </form>
+{% endif %}
+
                 </div>
             {% endfor %}
         {% else %}

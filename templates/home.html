@@ -1,14 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<section class="home-container">
-    <h1 class="title">Visual Arts Archive</h1>
-    <p class="subtitle">Explore and manage visual arts content</p>
+<div class="home-container">
 
     {% if error %}
-        <div class="error-box">
-            {{ error }}
-        </div>
+        <div class="error-box">{{ error }}</div>
     {% endif %}
 
     {% if session.get('admin') %}
@@ -20,29 +16,50 @@
         </div>
     {% endif %}
 
-    <div class="content-section">
-        {% if board %}<h2>{{ board.title }}</h2>{% else %}<h2>Posts</h2>{% endif %}
+    <!-- photo for homepage -->
+    <div class="hero">
+        <div class="hero-image">
+            <img src="{{ url_for('static', filename='images/hero.jpg') }}" alt="Visual Arts">
+        </div>
+        <div class="hero-about">
+            <h1 class="title">Visual Arts</h1>
+            <p>2slo visual arts website. Discover artworks from VA students, resources, and upcoming events.</p>
+        </div>
+    </div>
+
+    <!-- coming soon -->
+    <div class="coming-soon">
+        <p>Coming Soon</p>
+    </div>
+
+    <!-- announcement board -->
+    <div class="board-section">
+        {% if board %}<h2>{{ board.title }}</h2>{% else %}<h2>Announcements</h2>{% endif %}
 
         {% if posts %}
             {% for post in posts %}
-              <div class="post-card">
-    <h3>{{ post.title }}</h3>
-    <p>{{ post.content }}</p>
-    <small>{{ post.date }}</small>
-    {% if session.get('admin') %}
-        <a href="{{ url_for('edit_post', IDpost=post.IDpost) }}" class="admin-btn">Edit</a>
-        <form method="POST" action="{{ url_for('delete_post', IDpost=post.IDpost) }}" style="display:inline">
-            <button type="submit" class="admin-btn">Delete</button>
-        </form>
-    {% endif %}
-</div>
-
+                <div class="post-card">
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.content }}</p>
+                    <small>{{ post.date }}</small>
+                    {% if session.get('admin') %}
+                        <a href="{{ url_for('edit_post', IDpost=post.IDpost) }}" class="admin-btn">Edit</a>
+                        <form method="POST" action="{{ url_for('delete_post', IDpost=post.IDpost) }}" style="display:inline">
+                            <button type="submit" class="admin-btn">Delete</button>
+                        </form>
+                    {% endif %}
+                </div>
             {% endfor %}
         {% else %}
             <p>No posts yet.</p>
-        
         {% endif %}
     </div>
-</section>
+
+    <!-- footer -->
+    <footer class="footer">
+        <p>Visual Arts </p>
+    </footer>
+
+</div>
 
 {% endblock %}

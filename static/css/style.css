@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+body {
+    font-family: Playfair Display, serif;
+    background-color: #FAEADD;
+    color: #222023;
+}
+
+nav {
+    background-color: #522A6F;
+    padding: 10px 20px;
+    display: flex;
+}
+
+nav .logo {
+    color: #FAEADD;
+    font-size: 18px;
+}
+
+nav div {
+    gap: 10px;
+}
+
+.nav-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    color: #FAEADD;
+    text-decoration: none;
+    padding: 4px 8px;
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+
+.nav-btn:hover {
+    color: #FBCF4F;
+}
+
+.home-container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.hero {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.hero-image {
+    width: 50%;
+}
+
+.hero-image img {
+    width: 100%;
+}
+
+.hero-about {
+    width: 50%;
+}
+
+.title {
+    color: #522A6F;
+    font-size: 32px;
+}
+
+.coming-soon {
+    background-color: #DDAAFF;
+    padding: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.board-section h2 {
+    color: #522A6F;
+    border-bottom: 1px solid #522A6F;
+    padding-bottom: 4px;
+}
+
+.post-card {
+    background-color: white;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-left: 3px solid #522A6F;
+}
+
+.admin-panel {
+    background-color: #522A6F;
+    padding: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.admin-panel h2 {
+    color: #FAEADD;
+    font-size: 13px;
+    margin: 0;
+}
+
+.admin-btn {
+    background-color: #FBCF4F;
+    color: #222023;
+    border: none;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.footer {
+    background-color: #222023;
+    color: #FAEADD;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.login-container {
+    background-color: #FAEADD;
+    padding: 30px;
+    width: 300px;
+    position: relative;
+}
+
+.login-container h2 {
+    color: #522A6F;
+    margin-bottom: 16px;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #522A6F;
+    font-size: 14px;
+}
+
+.login-container button[type="submit"] {
+    width: 100%;
+    padding: 8px;
+    background-color: #522A6F;
+    color: #FAEADD;
+}
+
+.close-btn {
+    position: absolute;
+    top: 8px; right: 12px;
+    font-size: 20px;
+    color: #522A6F;
+}
+
+.error-box {
+    background-color: #F29CB7;
+    padding: 10px;
+    margin-bottom: 16px;
+}
+
+.message {
+    color: #522A6F;
+    font-size: 13px;
+}
