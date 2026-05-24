@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="home-container">
+    <h1 class="title">Edit Post</h1>
+    <form method="POST" action="{{ url_for('edit_post', IDpost=post.IDpost) }}" class="post-form">
+        <input type="text" name="title" value="{{ post.title }}" required>
+        <textarea name="content" rows="8" required>{{ post.content }}</textarea>
+        <input type="text" name="date" value="{{ post.date }}" required>
+        <button type="submit" class="admin-btn">Save Changes</button>
+    </form>
+</section>
+{% endblock %}

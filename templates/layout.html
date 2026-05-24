@@ -11,6 +11,11 @@
         <a href="{{ url_for('home') }}" class="logo">Visual Arts</a>
 
         <div>
+            <a href="{{ url_for('archive') }}" class="nav-btn">Archive</a>
+            <a href="{{ url_for('timeline') }}" class="nav-btn">Timeline</a>
+            <a href="{{ url_for('art_terms_list') }}" class="nav-btn">Art Terms</a>
+            <a href="{{ url_for('resources') }}" class="nav-btn">Resources</a>
+
             {% if session.get('admin') %}
                 <span class="nav-user">Logged in as {{ session.get('admin') }}</span>
                 <a href="{{ url_for('logout') }}" class="nav-btn">Log Out</a>

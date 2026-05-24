@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="home-container">
+    <h1 class="title">{{ item.name }}</h1>
+    <p>Author: {{ item.author }}</p>
+    <small>Year: {{ item.year }}</small>
+    <br><br>
+    <a href="{{ url_for('archive') }}" class="admin-btn">Back to Archive</a>
+</section>
+{% endblock %}

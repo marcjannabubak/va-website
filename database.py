@@ -1,8 +1,8 @@
-from datetime import date
 import sqlite3
 
 
-#this creates the db tables from the uml diagram
+#these functions create the db tables from the uml diagram
+#each table has variables, according to the uml diagram
 def init_db():
     conn = sqlite3.connect('va.db')
     c = conn.cursor()
@@ -104,8 +104,9 @@ class Admin:
     def __str__(self):
         return f"Admin: {self.username}, Role: {self.role}"
 
-
+#functions for the archive item table
 class ArchiveItem:
+    # constructor method for archive item class
     def __init__(self, year, author, name, pdfName, pdfData, IDadmin):
         self.year = year
         self.author = author
@@ -114,6 +115,7 @@ class ArchiveItem:
         self.pdfData = pdfData
         self.IDadmin = IDadmin
 
+# uploading a pdf file and their specifics to db
     def upload(self):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -132,6 +134,8 @@ class ArchiveItem:
 
         conn.commit()
     
+    #this function sorts the archive items by year, but i suppose i dont need it bc the
+    #sql uses order by yeyar desc so i have to consult this 
 
     def sort(self, items):
         n = len(items)
@@ -147,6 +151,7 @@ class ArchiveItem:
             i += 1
         return items
    
+   # this function gets all the archive items from the db and returns them to be shown on the website
     def get_all_archive_items():
         conn = sqlite3.connect("va.db")
         conn.row_factory = sqlite3.Row
@@ -156,7 +161,9 @@ class ArchiveItem:
 
         return items
     
+   
 
+#this function allows the admin to show the archive item when clicked on by user
     def get_archive_item_by_id(IDarchiveItem):
         conn = sqlite3.connect("va.db")
         conn.row_factory = sqlite3.Row
@@ -164,7 +171,7 @@ class ArchiveItem:
         c.execute("SELECT * FROM ArchiveItem WHERE IDarchiveItem = ?", (IDarchiveItem,))
         item = c.fetchone()
         return item
-    
+ # this function allows the admin to edit the specifics of the archive item chosen   
     def edit_archive_item(IDarchiveItem, year, author, name, pdfName, pdfData):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -184,6 +191,7 @@ class ArchiveItem:
 
         conn.commit()
 
+# this function allows the admin to delete the archive item chosen
     def delete_archive_item(IDarchiveItem):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -191,18 +199,23 @@ class ArchiveItem:
         c.execute("DELETE FROM ArchiveItem WHERE IDarchiveItem = ?", (IDarchiveItem,))
 
         conn.commit()
+
+    # this function gets the archive item and shows it as a string
     def __str__(self):
         return f"{self.name} by {self.author} ({self.year})"
 
-
+# functions for the board tables
 class Board:
+    #constructer method for board class
     def __init__(self, title, resourceOrDP1OrDP2):
         self.title = title
         self.resourceOrDP1OrDP2 = resourceOrDP1OrDP2
 
+    # this function gets the board with the and returns it as a string
     def __str__(self):
         return f"Board: {self.title}"
 
+    # this function gets the board with the IDboard and returns it to be shown on the specific page
     def get_board_by_id(IDboard):
         conn = sqlite3.connect("va.db")
         conn.row_factory = sqlite3.Row
@@ -212,15 +225,19 @@ class Board:
         board = c.fetchone()
         return board
     
+    #functions for the post table
 class Post:
+    #constructer method for post class
     def __init__(self, title, content, date, IDboard):
         self.title = title
         self.content = content
         self.date = date
         self.IDboard = IDboard
 
+    #this function gets the post and shows it as a string
     def __str__(self):
         return f"Post: {self.title} on {self.date}"
+    #this function gets all the posts from the db and returns them to be shown on the website
     def get_all_posts():
         conn = sqlite3.connect('va.db')
         conn.row_factory = sqlite3.Row
@@ -229,9 +246,20 @@ class Post:
         c.execute("SELECT * FROM Post ORDER BY IDpost DESC")
         posts = c.fetchall()
 
-    
         return posts
 
+    # this function fetches specific posts by using the IDboard and shows them on page
+    def get_posts_by_board(IDboard):
+        conn = sqlite3.connect('va.db')
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+
+        c.execute("SELECT * FROM Post WHERE IDboard = ? ORDER BY IDpost DESC", (IDboard,))
+        posts = c.fetchall()
+
+        return posts
+
+    #this function fetches a sppecific post and shows it on page
     def get_post_by_id(IDpost):
         conn = sqlite3.connect('va.db')
         conn.row_factory = sqlite3.Row
@@ -241,6 +269,7 @@ class Post:
         post = c.fetchone()
         return post
     
+    #this function allows the admins to add a post to the board chosen
     def add_post(title, content, date, IDboard, IDadmin):
         conn = sqlite3.connect('va.db')
         c = conn.cursor()
@@ -252,6 +281,7 @@ class Post:
 
         conn.commit()
     
+    #this function allows the admin to edit the post chosen 
     def edit_post(IDpost, title, content, date):
         conn = sqlite3.connect('va.db')
         c = conn.cursor()
@@ -262,7 +292,7 @@ class Post:
         )
 
         conn.commit()
-
+    #this function allows the admin to delete a specific post
     def delete_post(IDpost):
         conn = sqlite3.connect('va.db')
         c = conn.cursor()
@@ -271,11 +301,13 @@ class Post:
 
         conn.commit()
 
+#functions for the timeline event table
 class TimelineEvent:
     def __init__(self, title, description, date):
         self.title = title
         self.description = description
         self.date = date
+    #this function allows the admin to add a new timeline event to the timeline
     def add_timeline_event(title, description, date):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -287,6 +319,7 @@ class TimelineEvent:
         conn.commit()
     
 
+    #this function fetches all the timeeline events from the db and displays them on the timeline page
     def get_all_timeline_events():
         conn = sqlite3.connect("va.db")
         conn.row_factory = sqlite3.Row
@@ -296,6 +329,7 @@ class TimelineEvent:
     
         return events
     
+    #fetches a specific timeline event 
     def get_timeline_event_by_id(IDtimelineEvent):
         conn = sqlite3.connect("va.db")
         conn.row_factory = sqlite3.Row
@@ -304,6 +338,7 @@ class TimelineEvent:
         event = c.fetchone()
         return event
     
+    #allows the admin to edit a specific timeline event
     def edit_timeline_event(IDtimelineEvent, title, description, date):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -315,6 +350,7 @@ class TimelineEvent:
 
         conn.commit()
 
+    #allows the admin to delete a specific timeline event
     def delete_timeline_event(IDtimelineEvent):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -325,12 +361,14 @@ class TimelineEvent:
     def __str__(self):
         return f"{self.title} - {self.date}"
 
+#functions for the art terms table
 class ArtTerms:
     def __init__(self, title, definition, image):
         self.title = title
         self.definition = definition
         self.image = image
 
+    # adding new art term to art terms page by admin
     def add_art_term(title, definition, image, IDadmin):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -341,6 +379,7 @@ class ArtTerms:
         )
         conn.commit()
     
+#fetches all art terms and returns them to be shown on page
     def get_all_art_terms():
         conn = sqlite3.connect("va.db")
         conn.row_factory = sqlite3.Row
@@ -348,6 +387,7 @@ class ArtTerms:
         c.execute("SELECT * FROM ArtTerms ORDER BY title DESC")
         terms = c.fetchall()
         return terms
+    #fetches a specific art term and shows it on page
     def get_art_term_by_id(IDartTerm):
         conn = sqlite3.connect("va.db")
         conn.row_factory = sqlite3.Row
@@ -356,6 +396,7 @@ class ArtTerms:
         term = c.fetchone()
         return term
     
+    #allows the admin to edit a specific art term
     def edit_art_term(IDartTerm, title, definition, image):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -367,7 +408,7 @@ class ArtTerms:
 
         conn.commit()
     
-
+    #allows the admin to delete a specific art term
     def delete_art_term(IDartTerm):
         conn = sqlite3.connect("va.db")
         c = conn.cursor()
@@ -379,5 +420,6 @@ class ArtTerms:
     def __str__(self):
         return f"Art Term: {self.title}"
 
+#main function to run db
 if __name__ == '__main__':
     init_db()
