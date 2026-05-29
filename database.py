@@ -238,15 +238,16 @@ class Post:
     def __str__(self):
         return f"Post: {self.title} on {self.date}"
     #this function gets all the posts from the db and returns them to be shown on the website
-    def get_all_posts():
-        conn = sqlite3.connect('va.db')
-        conn.row_factory = sqlite3.Row
-        c = conn.cursor()
+    #but its no longer needed because we only want to show the posts of a specific board and not all the posts on the website
+    #def get_all_posts():
+       # conn = sqlite3.connect('va.db')
+     #   conn.row_factory = sqlite3.Row
+       # c = conn.cursor()
 
-        c.execute("SELECT * FROM Post ORDER BY IDpost DESC")
-        posts = c.fetchall()
+     #   c.execute("SELECT * FROM Post ORDER BY IDpost DESC")
+       # posts = c.fetchall()
 
-        return posts
+      #  return posts
 
     # this function fetches specific posts by using the IDboard and shows them on page
     def get_posts_by_board(IDboard):
