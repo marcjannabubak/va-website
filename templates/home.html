@@ -7,15 +7,6 @@
         <div class="error-box">{{ error }}</div>
     {% endif %}
 
-    {% if session.get('admin') %}
-        <div class="admin-panel">
-            <h2>Admin Controls</h2>
-            <a href="{{ url_for('add_post_page', IDboard=1) }}" class="admin-btn">Add Post</a>
-            <a href="{{ url_for('add_timeline_event_page') }}" class="admin-btn">Add Timeline Event</a>
-            <a href="{{ url_for('add_archive_item') }}" class="admin-btn">Upload Archive Item</a>
-        </div>
-    {% endif %}
-
     <!-- photo for homepage -->
     <div class="hero">
         <div class="hero-image">
@@ -35,6 +26,9 @@
     <!-- announcement board -->
     <div class="board-section">
         {% if board %}<h2>{{ board.title }}</h2>{% else %}<h2>Announcements</h2>{% endif %}
+        {% if session.get('admin') %}
+            <a href="{{ url_for('add_post_page', IDboard=1) }}" class="admin-btn">Add Post</a>
+        {% endif %}
 
         {% if posts %}
             {% for post in posts %}

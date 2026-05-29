@@ -6,6 +6,7 @@
     <p>Author: {{ item.author }}</p>
     <small>Year: {{ item.year }}</small>
     <br><br>
+    <a href="{{ url_for('serve_archive_pdf', IDarchiveItem=item.IDarchiveItem) }}" class="admin-btn" target="_blank">View PDF</a>
     <a href="{{ url_for('archive') }}" class="admin-btn">Back to Archive</a>
 </section>
 {% endblock %}

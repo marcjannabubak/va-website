@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="home-container">
+    <h1 class="title">{{ event.title }}</h1>
+    <small>{{ event.date }}</small>
+    <p>{{ event.description }}</p>
+    <br>
+    <a href="{{ url_for('timeline') }}" class="admin-btn">Back to Timeline</a>
+</section>
+{% endblock %}

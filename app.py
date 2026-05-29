@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
+import io
 from database import Admin, ArchiveItem, Board, Post, TimelineEvent, init_db, ArtTerms
 
 from functools import wraps
@@ -124,9 +125,15 @@ def edit_archive_item(IDarchiveItem):
         year = int(request.form["year"])
         author = request.form["author"]
         name = request.form["name"]
-        pdf_file = request.files["pdf_file"]
-        pdfName = pdf_file.filename
-        pdfData = pdf_file.read()
+        pdf_file = request.files.get("pdf_file")
+
+        if pdf_file and pdf_file.filename:
+            pdfName = pdf_file.filename
+            pdfData = pdf_file.read()
+        else:
+            existing = ArchiveItem.get_archive_item_by_id(IDarchiveItem)
+            pdfName = existing["pdfName"]
+            pdfData = existing["pdfData"]
 
         ArchiveItem.edit_archive_item(IDarchiveItem, year, author, name, pdfName, pdfData)
         return redirect(url_for("home"))
@@ -181,6 +188,11 @@ def timeline():
     events = TimelineEvent.get_all_timeline_events()
     return render_template("timeline.html", events=events)
 
+@app.route("/timeline/<int:IDtimelineEvent>")
+def timeline_event_page(IDtimelineEvent):
+    event = TimelineEvent.get_timeline_event_by_id(IDtimelineEvent)
+    return render_template("timelineevent.html", event=event)
+
 
 #board functions routes
 @app.route("/board/<int:IDboard>")
@@ -207,11 +219,26 @@ def archive_item_page(IDarchiveItem):
     item = ArchiveItem.get_archive_item_by_id(IDarchiveItem)
     return render_template("archiveItem.html", item=item)
 
+@app.route("/archive/<int:IDarchiveItem>/pdf")
+def serve_archive_pdf(IDarchiveItem):
+    item = ArchiveItem.get_archive_item_by_id(IDarchiveItem)
+    return send_file(io.BytesIO(item["pdfData"]), mimetype="application/pdf", download_name=item["pdfName"])
+
+@app.route("/art_term/<int:IDartTerm>/image")
+def serve_art_term_image(IDartTerm):
+    term = ArtTerms.get_art_term_by_id(IDartTerm)
+    return send_file(io.BytesIO(term["image"]), mimetype="image/jpeg")
+
 #art term functions routes
 
-@app.route("/art_terms", methods=["GET", "POST"])
-@admin_required
+@app.route("/art_terms")
 def art_terms():
+    terms = ArtTerms.get_all_art_terms()
+    return render_template("artTerms.html", terms=terms)
+
+@app.route("/add_art_term", methods=["GET", "POST"])
+@admin_required
+def add_art_term():
     if request.method == "POST":
         title = request.form["title"]
         definition = request.form["definition"]
@@ -222,13 +249,9 @@ def art_terms():
         IDadmin = admin["IDadmin"]
 
         ArtTerms.add_art_term(title, definition, imageData, IDadmin)
-        return redirect(url_for("home"))
-    return render_template("artTerms.html")
+        return redirect(url_for("art_terms"))
 
-@app.route("/art_terms_list")
-def art_terms_list():
-    terms = ArtTerms.get_all_art_terms()
-    return render_template("artTerms.html", terms=terms)
+    return render_template("addArtTerm.html")
 
 @app.route("/edit_art_term/<int:IDartTerm>", methods=["GET", "POST"])
 @admin_required
@@ -236,8 +259,12 @@ def edit_art_term(IDartTerm):
     if request.method == "POST":
         title = request.form["title"]
         definition = request.form["definition"]
-        image_file = request.files["image_file"]
-        imageData = image_file.read()
+        image_file = request.files.get("image_file")
+        imageData = image_file.read() if image_file and image_file.filename else None
+
+        if imageData is None:
+            existing = ArtTerms.get_art_term_by_id(IDartTerm)
+            imageData = existing["image"]
 
         ArtTerms.edit_art_term(IDartTerm, title, definition, imageData)
         return redirect(url_for("home"))

@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="home-container">
+    <h1 class="title">{{ term.title }}</h1>
+    <img src="{{ url_for('serve_art_term_image', IDartTerm=term.IDartTerm) }}" alt="{{ term.title }}" style="max-width:100%;max-height:400px;">
+    <p>{{ term.definition }}</p>
+    <br>
+    <a href="{{ url_for('art_terms') }}" class="admin-btn">Back to Art Terms</a>
+</section>
+{% endblock %}

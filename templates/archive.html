@@ -5,13 +5,23 @@
     <h1 class="title">Archive</h1>
     <p class="subtitle">View all archive items</p>
 
+    {% if session.get('admin') %}
+        <a href="{{ url_for('add_archive_item') }}" class="admin-btn">Upload Archive Item</a>
+    {% endif %}
+
     <div class="content-section">
         {% if items %}
             {% for item in items %}
                 <div class="post-card">
-                    <h3>{{ item.name }}</h3>
+                    <h3><a href="{{ url_for('archive_item_page', IDarchiveItem=item.IDarchiveItem) }}">{{ item.name }}</a></h3>
                     <p>Author: {{ item.author }}</p>
                     <small>Year: {{ item.year }}</small>
+                    {% if session.get('admin') %}
+                        <a href="{{ url_for('edit_archive_item', IDarchiveItem=item.IDarchiveItem) }}" class="admin-btn">Edit</a>
+                        <form method="POST" action="{{ url_for('delete_archive_item', IDarchiveItem=item.IDarchiveItem) }}" style="display:inline">
+                            <button type="submit" class="admin-btn">Delete</button>
+                        </form>
+                    {% endif %}
                 </div>
             {% endfor %}
         {% else %}

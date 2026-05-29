@@ -2,11 +2,11 @@
 
 {% block content %}
 <section class="home-container">
-    <h1 class="title">Edit Post</h1>
-    <form method="POST" action="{{ url_for('edit_timeline_event', IDtimelineEvent=timelineEvent.IDtimelineEvent) }}" class="post-form">
-        <input type="text" name="title" value="{{ timelineEvent.title }}" required>
-        <textarea name="description" rows="8" required>{{ timelineEvent.description }}</textarea>
-        <input type="text" name="date" value="{{ timelineEvent.date }}" required>
+    <h1 class="title">Edit Art Term</h1>
+    <form method="POST" action="{{ url_for('edit_art_term', IDartTerm=term.IDartTerm) }}" class="post-form" enctype="multipart/form-data">
+        <input type="text" name="title" value="{{ term.title }}" required>
+        <textarea name="definition" rows="8" required>{{ term.definition }}</textarea>
+        <input type="file" name="image_file" accept="image/*">
         <button type="submit" class="admin-btn">Save Changes</button>
     </form>
 </section>
