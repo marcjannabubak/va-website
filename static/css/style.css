@@ -1,52 +1,77 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Changa+One:ital@0;1&family=DM+Sans:wght@400;500&display=swap');
+
 body {
-    font-family: Playfair Display, serif;
-    background-color: #FAEADD;
+    font-family: 'DM Sans', sans-serif;
+    background-color: #FFD6FA;
     color: #222023;
 }
 
+button, input, textarea, select {
+    font-family: inherit;
+}
+
+/* ── Nav ── */
 nav {
-    background-color: #522A6F;
-    padding: 10px 20px;
+    background: linear-gradient(to right, #522A6F, #8B4A8B, #F29CB7);
+    padding: 12px 28px;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(82, 42, 111, 0.3);
 }
 
 nav .logo {
-    color: #FAEADD;
-    font-size: 18px;
+    color: #F4C094;
+    font-family: 'Changa One', sans-serif;
+    font-size: 22px;
+    text-decoration: none;
+    letter-spacing: 0.04em;
 }
 
 nav div {
-    gap: 10px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
 }
 
 .nav-btn {
     appearance: none;
     -webkit-appearance: none;
-    color: #FAEADD;
+    color: #FFD6FA;
     text-decoration: none;
-    padding: 4px 8px;
+    padding: 5px 10px;
     font-size: 14px;
     background: none;
     border: none;
     cursor: pointer;
+    border-radius: 2px;
+    transition: background-color 0.2s, color 0.2s;
 }
-
 
 .nav-btn:hover {
-    color: #FBCF4F;
+    background-color: #F4C094;
+    color: #222023;
 }
 
+.nav-user {
+    color: #FFD6FA;
+    font-size: 13px;
+
+    opacity: 0.85;
+    padding: 0 6px;
+}
+
+/* ── Layout ── */
 .home-container {
     max-width: 900px;
-    margin: 20px auto;
-    padding: 0 20px;
+    margin: 32px auto;
+    padding: 0 24px;
 }
 
 .hero {
     display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
+    gap: 28px;
+    margin-bottom: 32px;
 }
 
 .hero-image {
@@ -55,120 +80,238 @@ nav div {
 
 .hero-image img {
     width: 100%;
+    box-shadow: 0 4px 16px rgba(82, 42, 111, 0.15);
 }
 
 .hero-about {
     width: 50%;
 }
 
+/* ── Typography ── */
 .title {
     color: #522A6F;
-    font-size: 32px;
+    font-family: 'Changa One', sans-serif;
+    font-size: 34px;
+    letter-spacing: 0.03em;
+    margin-bottom: 24px;
 }
 
+/* ── Boards & Cards ── */
 .coming-soon {
-    background-color: #DDAAFF;
-    padding: 8px;
+    background: linear-gradient(to right, #DDAAFF, #F29CB7);
+    padding: 10px 16px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    color: #522A6F;
+
+}
+
+.board-section {
+    margin-bottom: 36px;
 }
 
 .board-section h2 {
     color: #522A6F;
-    border-bottom: 1px solid #522A6F;
-    padding-bottom: 4px;
+    font-family: 'Changa One', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    border-bottom: 2px solid #F4C094;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
 }
 
 .post-card {
     background-color: white;
-    padding: 12px;
+    padding: 14px 16px;
     margin-bottom: 10px;
-    border-left: 3px solid #522A6F;
+    border-left: 4px solid #F29CB7;
+    box-shadow: 0 1px 4px rgba(82, 42, 111, 0.07);
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.post-card:hover {
+    border-left-color: #522A6F;
+    box-shadow: 0 2px 10px rgba(82, 42, 111, 0.14);
+}
+
+/* ── Admin panel ── */
 .admin-panel {
-    background-color: #522A6F;
-    padding: 10px;
-    margin-bottom: 20px;
+    background: linear-gradient(to right, #522A6F, #7A3A9A);
+    padding: 12px 16px;
+    margin-bottom: 24px;
     display: flex;
     gap: 10px;
     align-items: center;
+    box-shadow: 0 2px 8px rgba(82, 42, 111, 0.2);
 }
 
 .admin-panel h2 {
-    color: #FAEADD;
+    color: #FFD6FA;
     font-size: 13px;
     margin: 0;
+
 }
 
 .admin-btn {
-    background-color: #FBCF4F;
+    background-color: #F4C094;
     color: #222023;
     border: none;
-    padding: 6px 14px;
+    padding: 7px 16px;
     cursor: pointer;
     font-size: 13px;
+    font-weight: 700;
     text-decoration: none;
     display: inline-block;
+    transition: background-color 0.2s, transform 0.1s;
 }
 
+.admin-btn:hover {
+    background-color: #f0c030;
+    transform: translateY(-1px);
+}
+
+/* ── Post / Edit form ── */
+.post-form {
+    background-color: white;
+    padding: 36px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(82, 42, 111, 0.12);
+    border-top: 5px solid #F4C094;
+}
+
+.post-form label {
+    display: block;
+    font-size: 12px;
+    color: #522A6F;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.post-form input,
+.post-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #DDAAFF;
+    font-size: 14px;
+    background-color: #fdf8f4;
+    color: #222023;
+    box-sizing: border-box;
+    margin-bottom: 22px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.post-form input:focus,
+.post-form textarea:focus {
+    outline: none;
+    border-color: #522A6F;
+    box-shadow: 0 0 0 3px rgba(82, 42, 111, 0.08);
+    background-color: white;
+}
+
+.post-form textarea {
+    resize: vertical;
+    min-height: 160px;
+}
+
+.post-form .form-actions {
+    margin-top: 8px;
+}
+
+/* ── Footer ── */
 .footer {
-    background-color: #222023;
-    color: #FAEADD;
+    background: linear-gradient(to right, #222023, #522A6F);
+    color: #FFD6FA;
     text-align: center;
-    padding: 15px;
-    margin-top: 40px;
+    padding: 18px;
+    margin-top: 48px;
+
+    font-size: 14px;
 }
 
+/* ── Login overlay ── */
 .overlay {
     display: none;
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(34, 32, 35, 0.6);
+    backdrop-filter: blur(2px);
+    justify-content: center;
+    align-items: center;
 }
 
 .login-container {
-    background-color: #FAEADD;
-    padding: 30px;
-    width: 300px;
+    background-color: #FFD6FA;
+    padding: 36px;
+    width: 320px;
     position: relative;
+    border-top: 5px solid #522A6F;
+    box-shadow: 0 8px 32px rgba(34, 32, 35, 0.3);
 }
 
 .login-container h2 {
     color: #522A6F;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+
 }
 
 .login-container input {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #522A6F;
+    padding: 9px 12px;
+    margin-bottom: 12px;
+    border: 1px solid #DDAAFF;
     font-size: 14px;
+    background-color: white;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.login-container input:focus {
+    outline: none;
+    border-color: #522A6F;
 }
 
 .login-container button[type="submit"] {
     width: 100%;
-    padding: 8px;
-    background-color: #522A6F;
-    color: #FAEADD;
+    padding: 10px;
+    background: linear-gradient(to right, #522A6F, #7A3A9A);
+    color: #FFD6FA;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s;
+}
+
+.login-container button[type="submit"]:hover {
+    opacity: 0.9;
 }
 
 .close-btn {
     position: absolute;
-    top: 8px; right: 12px;
-    font-size: 20px;
+    top: 10px; right: 14px;
+    font-size: 22px;
     color: #522A6F;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
 }
 
+/* ── Alerts ── */
 .error-box {
     background-color: #F29CB7;
-    padding: 10px;
+    padding: 10px 14px;
     margin-bottom: 16px;
+    border-left: 3px solid #522A6F;
 }
 
 .message {
     color: #522A6F;
     font-size: 13px;
+
 }
